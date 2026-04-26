@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura - AI Fitness Tracker</title>
+  <meta name="description" content="Aura is your intelligent, safe, and personalized fitness tracker powered by AI.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+  <!-- Ambient background elements -->
+  <div class="ambient-bg">
+    <div class="glow orb-1"></div>
+    <div class="glow orb-2"></div>
+    <div class="glow orb-3"></div>
+  </div>
+
+  <div id="app" class="app-container">
+    <!-- View: Setup / Onboarding -->
+    <section id="view-setup" class="view">
+      <div class="glass-card text-center onboarding-card">
+        <h1 class="logo-text">Aura</h1>
+        <p class="subtitle">Your intelligent fitness journey starts here.</p>
+        
+        <form id="setup-form" class="form-group slide-up">
+          <div class="input-field">
+            <label for="setup-name">What should we call you?</label>
+            <input type="text" id="setup-name" placeholder="e.g. Alex" required>
+          </div>
+          
+          <div class="input-field">
+            <label for="setup-age">Your Age</label>
+            <input type="number" id="setup-age" placeholder="e.g. 28" min="13" max="120" required>
+          </div>
+
+          <div style="display: flex; gap: 1rem;">
+            <div class="input-field" style="flex: 1;">
+              <label for="setup-weight">Weight (kg)</label>
+              <input type="number" id="setup-weight" placeholder="e.g. 70" min="20" max="300" required>
+            </div>
+            <div class="input-field" style="flex: 1;">
+              <label for="setup-height">Height (cm)</label>
+              <input type="number" id="setup-height" placeholder="e.g. 175" min="50" max="300" required>
+            </div>
+          </div>
+
+          <div class="input-field">
+            <label for="setup-goal">Primary Fitness Goal</label>
+            <textarea id="setup-goal" placeholder="e.g. Build strength, run a 5k, stay active..." rows="3" required></textarea>
+          </div>
+
+          <div class="input-field">
+            <label for="setup-api-key">Gemini API Key</label>
+            <p class="helper-text">Provides real AI feedback. Left blank, Aura will simulate responses.</p>
+            <input type="password" id="setup-api-key" placeholder="AIzaSy...">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-glow mt-4">
+            Begin Journey <span class="icon">→</span>
+          </button>
+          
+          <button type="button" id="btn-reset-init" class="btn btn-secondary mt-2 w-full" style="color: #ff8888; border: 1px dashed rgba(255, 136, 136, 0.3);">
+            Reset All Data
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- View: Dashboard -->
+    <section id="view-dashboard" class="view hidden">
+      <header class="dashboard-header glass-header">
+        <div class="user-info">
+          <h2 id="greet-name">Hello, User</h2>
+          <p class="goal-text" id="display-goal">Goal: Stay active</p>
+        </div>
+        <div class="actions">
+          <button id="btn-settings" class="btn btn-icon" aria-label="Settings">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <!-- Add Workout Card -->
+        <div class="glass-card cta-card" id="btn-add-workout">
+          <div class="icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </div>
+          <h3>Log New Activity</h3>
+          <p>Record your session and get AI feedback.</p>
+        </div>
+
+        <!-- History -->
+        <div class="history-section mt-6">
+          <h3 class="section-title">Recent Activity</h3>
+          <div id="workout-list" class="workout-list">
+            <!-- Workouts populated by JS -->
+            <div class="empty-state">
+              <p>No workouts logged yet. Start your journey today!</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- View: Log Workout -->
+    <section id="view-log" class="view hidden">
+      <div class="glass-card">
+        <button id="btn-back-log" class="btn btn-icon btn-back">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Back
+        </button>
+        <h2 class="mb-4 mt-2">Log Activity</h2>
+        
+        <form id="log-form" class="form-group">
+          <div class="input-field">
+            <label for="log-type">Activity Type</label>
+            <input type="text" id="log-type" placeholder="e.g. Running, Yoga, Weightlifting" required>
+          </div>
+          
+          <div class="input-field">
+            <label for="log-duration">Duration (minutes)</label>
+            <input type="number" id="log-duration" placeholder="e.g. 45" min="1" required>
+          </div>
+
+          <div class="input-field">
+            <label for="log-feeling">How did it feel?</label>
+            <textarea id="log-feeling" placeholder="e.g. Felt great but my knees are a bit sore..." rows="3" required></textarea>
+          </div>
+
+          <!-- Loading state for AI -->
+          <div id="ai-loading" class="ai-loading-state hidden mt-4">
+            <div class="spinner"></div>
+            <p>Aura is analyzing your session...</p>
+          </div>
+
+          <button type="submit" id="btn-submit-log" class="btn btn-primary btn-glow mt-4 w-full">
+            Save & Get Insights
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Modal: AI Feedback -->
+    <div id="modal-feedback" class="modal hidden">
+      <div class="modal-content glass-card slide-up">
+        <div class="modal-header">
+          <h3>Aura Insight</h3>
+          <button id="btn-close-modal" class="btn btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="modal-body" id="ai-feedback-content">
+          <!-- Markdown or text from AI -->
+        </div>
+        <div class="modal-footer mt-4">
+          <button id="btn-modal-done" class="btn btn-secondary w-full">Done</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Modal: Reset Confirmation -->
+    <div id="modal-reset" class="modal hidden">
+      <div class="modal-content glass-card slide-up">
+        <div class="modal-header">
+          <h3 style="color: #ff8888;">Danger Zone</h3>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to permanently delete all your data and workout history? This cannot be undone.</p>
+        </div>
+        <div class="modal-footer mt-4" style="display: flex; gap: 1rem;">
+          <button id="btn-cancel-reset" class="btn btn-secondary" style="flex: 1;">Cancel</button>
+          <button id="btn-confirm-reset" class="btn" style="flex: 1; background: rgba(255, 100, 100, 0.2); color: #ff8888; border: 1px solid #ff8888;">Delete Everything</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="app.js?v=3"></script>
+</body>
+</html>
